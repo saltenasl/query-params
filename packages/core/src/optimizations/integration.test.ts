@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { z } from 'zod'
-import { encode, decode } from '../index.js'
+import { encode } from '../index.js'
 import {
   buildStringDictionary,
   applyStringDictionary,
@@ -13,19 +13,11 @@ import {
   packBooleans,
   unpackBooleans,
   restoreBooleanValues,
-  removeBooleanFields,
   shouldPackBooleans
 } from './boolean-packing.js'
 
 describe('Optimization Integration', () => {
   it('should demonstrate string dictionary compression workflow', () => {
-    const schema = z.object({
-      items: z.array(z.object({
-        category: z.string(),
-        type: z.string()
-      }))
-    })
-
     // Original data with repeated strings
     const original = {
       items: [
@@ -115,7 +107,7 @@ describe('Optimization Integration', () => {
     // With dictionary (manual for now)
     const dict = buildStringDictionary(dataWithRepetition)
     if (shouldUseDictionary(dataWithRepetition, dict)) {
-      const compressed = applyStringDictionary(dataWithRepetition, dict)
+      applyStringDictionary(dataWithRepetition, dict)
       // In real implementation, we'd encode both compressed data and dictionary
       console.log('Would save space with dictionary!')
       console.log('Unique strings:', dict.strings.length)

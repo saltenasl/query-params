@@ -9,7 +9,7 @@ export const RESERVED_FIELD = '_encodedStateVersion'
 /**
  * Type guard to check if a value is a ZodObject
  */
-export function isZodObject(schema: unknown): schema is z.ZodObject<any> {
+export function isZodObject(schema: unknown): schema is z.ZodObject<z.ZodRawShape> {
   return schema instanceof z.ZodObject
 }
 

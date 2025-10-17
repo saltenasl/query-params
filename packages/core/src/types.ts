@@ -21,5 +21,6 @@ export interface DecoderOptions {
 
 export interface VersionedSchemaConfig<T extends Record<string, z.ZodType>> {
   versions: T
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   migrations: Record<string, { up: (data: any) => any; down: (data: any) => any }>
 }

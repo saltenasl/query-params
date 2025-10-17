@@ -102,7 +102,7 @@ function decodeInternal(
   const pbType = zodToProtobuf(schema)
 
   // 4. Parse protobuf message
-  let decoded: any
+  let decoded: protobuf.Message
   try {
     decoded = pbType.decode(binary)
   } catch (error) {
@@ -118,12 +118,12 @@ function decodeInternal(
     arrays: true,
     objects: true,
     oneofs: true
-  })
+  }) as Record<string, unknown>
 
   // 5. Extract version (default to 1 if missing for backward compatibility)
   const version = decodedObj[RESERVED_FIELD]
 
-  let dataWithoutVersion: any
+  let dataWithoutVersion: Record<string, unknown>
   if (version !== undefined) {
     if (typeof version !== 'number') {
       throw new DecodingError(

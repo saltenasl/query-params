@@ -17,8 +17,8 @@ describe('Protobuf Converter', () => {
 
       const pbType = zodToProtobuf(schema);
 
-      // Version is no longer in protobuf payload - it's in the 2-byte header
-      expect(pbType.fields._encodedStateVersion).toBeUndefined();
+      // Version field is now in protobuf schema
+      expect(pbType.fields._encodedStateVersion).toBeDefined();
       expect(pbType.fields.name).toBeDefined();
     });
 
@@ -221,8 +221,8 @@ describe('Protobuf Converter', () => {
       // Decode
       const decoded = pbType.decode(buffer) as any;
 
-      // Version is no longer in payload (moved to header)
-      expect(decoded._encodedStateVersion).toBeUndefined();
+      // Version field is now in protobuf schema (with default value 0 when not set)
+      expect(decoded._encodedStateVersion).toBe(0);
       expect(decoded.name).toBe('John Doe');
       expect(decoded.age).toBe(30);
       expect(decoded.active).toBe(true);
@@ -353,8 +353,8 @@ describe('Protobuf Converter', () => {
 
       const pbType = zodToProtobuf(schema);
 
-      // Empty schema = no fields (version is in header now)
-      expect(Object.keys(pbType.fields)).toEqual([]);
+      // Empty schema still has version field
+      expect(Object.keys(pbType.fields)).toEqual(['_encodedStateVersion']);
     });
 
     it('should handle deeply nested objects', () => {

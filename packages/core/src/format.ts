@@ -116,8 +116,8 @@ export function decodeWithHeader(encoded: Uint8Array): {
     throw new Error('Encoded data too short - missing header')
   }
 
-  const byte0 = encoded[0]
-  const byte1 = encoded[1]
+  const byte0 = encoded[0]!
+  const byte1 = encoded[1]!
 
   // Extract version (10 bits)
   const versionLower = byte0 & 0x3F // Lower 6 bits

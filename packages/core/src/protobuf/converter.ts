@@ -1,5 +1,6 @@
 import protobuf from 'protobufjs';
 import { z } from 'zod';
+import { RESERVED_FIELD } from '../validation.js';
 
 /**
  * Converts a Zod schema to a Protocol Buffer Type
@@ -17,9 +18,18 @@ export function zodToProtobuf(
   // Create the main message type
   const messageType = new protobuf.Type(messageName);
 
-  // Version is now in the 2-byte header, not in protobuf payload
-  // Convert the Zod schema to protobuf fields starting at field number 1
-  let fieldNumber = 1;
+  // Add reserved version field (field number 1)
+  // This field is added by the encoder for version tracking
+  const versionField = new protobuf.Field(
+    RESERVED_FIELD,
+    1,
+    'uint32',
+    'optional'
+  );
+  messageType.add(versionField);
+
+  // Convert the Zod schema to protobuf fields starting at field number 2
+  let fieldNumber = 2;
 
   // Unwrap the schema if it's wrapped in effects
   let unwrappedSchema = schema;
@@ -149,8 +159,8 @@ function zodTypeToProtobufType(
   // Number
   if (unwrappedSchema instanceof z.ZodNumber) {
     // Check for integer constraints
-    const checks = (unwrappedSchema._def as any).checks || [];
-    const hasIntCheck = checks.some((check: any) => check.kind === 'int');
+    const checks = (unwrappedSchema._def as { checks?: Array<{ kind: string }> }).checks || [];
+    const hasIntCheck = checks.some((check) => check.kind === 'int');
 
     if (hasIntCheck) {
       // Use int32 for integers

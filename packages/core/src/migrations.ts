@@ -7,6 +7,7 @@ import { createVersionMismatchError } from './errors.js'
  * Represents a migration between two versions
  * Migrations must be pure functions with no side effects
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Migration<TFrom = any, TTo = any> {
   /**
    * Upgrades data from version N to N+1
@@ -33,6 +34,7 @@ export interface Migration<TFrom = any, TTo = any> {
  * })
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createMigration<TFrom = any, TTo = any>(
   migration: Migration<TFrom, TTo>
 ): Migration<TFrom, TTo> {
@@ -43,7 +45,7 @@ export function createMigration<TFrom = any, TTo = any>(
  * Helper function to extract version and data from encoded string
  * without requiring a specific schema
  */
-function extractVersionAndData(encoded: string, sourceSchema: z.ZodType): { version: number; data: any } {
+function extractVersionAndData(encoded: string, sourceSchema: z.ZodType): { version: number; data: unknown } {
   const { data, version } = decodeWithVersion(encoded, sourceSchema)
   return { version, data }
 }
@@ -152,6 +154,7 @@ export function getVersion(encoded: string, schema: z.ZodType): number {
  * Type helper for creating migration chains
  * Ensures type safety across multiple migrations
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MigrationChain<Versions extends readonly any[]> = {
   [K in keyof Versions]: K extends `${number}`
     ? number extends Versions[K]

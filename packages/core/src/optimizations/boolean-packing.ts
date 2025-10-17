@@ -93,13 +93,13 @@ export function extractBooleanValues(
   const values: boolean[] = []
 
   for (const field of fields) {
-    let current: any = data
+    let current: unknown = data
     let found = true
 
     // Traverse the path
     for (const key of field.path) {
       if (current && typeof current === 'object' && key in current) {
-        current = current[key]
+        current = (current as Record<string, unknown>)[key]
       } else {
         found = false
         break
@@ -129,7 +129,7 @@ export function packBooleans(values: boolean[]): Uint8Array {
     if (values[i]) {
       const byteIndex = Math.floor(i / 8)
       const bitPosition = i % 8
-      bytes[byteIndex] |= (1 << bitPosition)
+      bytes[byteIndex]! |= (1 << bitPosition)
     }
   }
 
@@ -147,7 +147,7 @@ export function unpackBooleans(bytes: Uint8Array, count: number): boolean[] {
     const bitPosition = i % 8
 
     if (byteIndex < bytes.length) {
-      const bit = (bytes[byteIndex] >> bitPosition) & 1
+      const bit = (bytes[byteIndex]! >> bitPosition) & 1
       values.push(bit === 1)
     } else {
       values.push(false)
@@ -169,22 +169,22 @@ export function restoreBooleanValues(
   const result = JSON.parse(JSON.stringify(data))
 
   for (let i = 0; i < fields.length && i < values.length; i++) {
-    const field = fields[i]
+    const field = fields[i]!
     const value = values[i]
 
-    let current: any = result
+    let current: Record<string, unknown> = result as Record<string, unknown>
 
     // Traverse to parent
     for (let j = 0; j < field.path.length - 1; j++) {
-      const key = field.path[j]
+      const key = field.path[j]!
       if (!(key in current)) {
         current[key] = {}
       }
-      current = current[key]
+      current = current[key] as Record<string, unknown>
     }
 
     // Set the boolean value
-    const lastKey = field.path[field.path.length - 1]
+    const lastKey = field.path[field.path.length - 1]!
     current[lastKey] = value
   }
 
@@ -202,21 +202,22 @@ export function removeBooleanFields(
   const result = JSON.parse(JSON.stringify(data))
 
   for (const field of fields) {
-    let current: any = result
+    let current: unknown = result
 
     // Traverse to parent
     for (let j = 0; j < field.path.length - 1; j++) {
-      const key = field.path[j]
-      if (!(key in current)) {
+      const key = field.path[j]!
+      if (current && typeof current === 'object' && key in current) {
+        current = (current as Record<string, unknown>)[key]
+      } else {
         break
       }
-      current = current[key]
     }
 
     // Remove the boolean field
     if (current && typeof current === 'object') {
-      const lastKey = field.path[field.path.length - 1]
-      delete current[lastKey]
+      const lastKey = field.path[field.path.length - 1]!
+      delete (current as Record<string, unknown>)[lastKey]
     }
   }
 

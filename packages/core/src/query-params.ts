@@ -26,7 +26,8 @@ import { ValidationError } from './errors.js'
  * ```
  */
 export class EncodedQueryParams {
-  private data: Record<string, any>
+  private data: Record<string, unknown>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private schema: z.ZodObject<any>
   private version: number
 
@@ -38,7 +39,7 @@ export class EncodedQueryParams {
    * @param version - Version number (default: 1)
    */
   constructor(
-    init: string | Record<string, any>,
+    init: string | Record<string, unknown>,
     schema: z.ZodType,
     version: number = 1
   ) {
@@ -100,8 +101,8 @@ export class EncodedQueryParams {
    *
    * @param name - Parameter name
    */
-  getRaw<T = any>(name: string): T | undefined {
-    return this.data[name]
+  getRaw<T = unknown>(name: string): T | undefined {
+    return this.data[name] as T | undefined
   }
 
   /**
@@ -110,7 +111,7 @@ export class EncodedQueryParams {
    * @param name - Parameter name
    * @param value - Parameter value
    */
-  set(name: string, value: any): void {
+  set(name: string, value: unknown): void {
     // Create a new data object with the updated value
     const newData = {
       ...this.data,
@@ -152,7 +153,7 @@ export class EncodedQueryParams {
    * @param name - Parameter name
    * @param value - Value to append
    */
-  append(name: string, value: any): void {
+  append(name: string, value: unknown): void {
     if (!(name in this.data)) {
       throw new ValidationError(
         `Cannot append to non-existent parameter: ${name}`
@@ -176,7 +177,7 @@ export class EncodedQueryParams {
    */
   sort(): void {
     const sortedKeys = Object.keys(this.data).sort()
-    const sortedData: Record<string, any> = {}
+    const sortedData: Record<string, unknown> = {}
 
     for (const key of sortedKeys) {
       sortedData[key] = this.data[key]
@@ -226,7 +227,7 @@ export class EncodedQueryParams {
    */
   forEach(
     callback: (value: string, key: string, parent: this) => void,
-    thisArg?: any
+    thisArg?: unknown
   ): void {
     const boundCallback = thisArg ? callback.bind(thisArg) : callback
 
@@ -247,7 +248,7 @@ export class EncodedQueryParams {
    * Returns the raw data object
    * This is useful for accessing the original typed data
    */
-  toObject(): Record<string, any> {
+  toObject(): Record<string, unknown> {
     return { ...this.data }
   }
 

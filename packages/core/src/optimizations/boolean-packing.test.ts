@@ -189,8 +189,8 @@ describe('Boolean Bit-Packing', () => {
     expect(values.length).toBe(2)
 
     // Fields are in alphabetical order: 'optional' then 'required'
-    expect(fields[0].path).toEqual(['optional'])
-    expect(fields[1].path).toEqual(['required'])
+    expect(fields[0]!.path).toEqual(['optional'])
+    expect(fields[1]!.path).toEqual(['required'])
 
     // Values: optional=false (missing), required=true
     expect(values[0]).toBe(false) // optional is missing, defaults to false

@@ -21,6 +21,7 @@ export function compress(data: Uint8Array): Uint8Array {
     } else {
       // Browser: use pako (dynamically imported)
       // Note: This will be resolved at build time for browser bundles
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const pako = require('pako')
       return pako.deflate(data)
     }
