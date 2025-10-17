@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    // Target modern JavaScript for better performance
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // Module resolution
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+    // Type checking
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Emit
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "importHelpers": true,
+    "skipLibCheck": true,
+
+    // Compatibility
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+
+    // Advanced
+    "verbatimModuleSyntax": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "tests",
+    "**/tests",
+    "benchmarks",
+    "examples"
+  ]
+}

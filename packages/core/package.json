@@ -1,0 +1,45 @@
+{
+  "name": "@encoded-state/core",
+  "version": "0.1.0",
+  "description": "Core compression and encoding utilities for encoded-state",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "pako": "^2.1.0",
+    "protobufjs": "^7.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4"
+  },
+  "keywords": [
+    "compression",
+    "encoding",
+    "base64url",
+    "zlib",
+    "pako"
+  ],
+  "author": "",
+  "license": "MIT"
+}
